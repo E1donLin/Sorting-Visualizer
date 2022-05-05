@@ -17,8 +17,8 @@ function makeArray(length) {
 }
 
 function App() {
-  const [baseArray, setArray] = useState(makeArray(20))
-  const [algorithm, setAlgorithm] = useState(() => selectionSort)
+  const [baseArray, setArray] = useState([4, 5, 2, 1, 3])
+  const [algorithm, setAlgorithm] = useState(() => quickSort)
   const [sortStatus, setSortStatus] = useState('pause')
 
   function newArray() {

@@ -3,12 +3,14 @@ import { useState, useEffect, useRef } from 'react'
 const comparisonColor = 'pink'
 const swapColor = 'cyan'
 const sortedColor = 'springgreen'
+const pivotColor = 'sandybrown'
 
 function SortVisualizer({ baseArray, algorithm, sortStatus }) {
   const [done, setDone] = useState(true)
   const [highlightIndices, setHighlightIndices] = useState([])
   const [swapIndices, setSwapIndices] = useState([])
   const [sortedIndices, setSortedIndices] = useState([])
+  const pivotIndex = useRef(-1)
   const sortIterator = useRef(null)
   const intervalId = useRef(null)
   const algoArray = useRef([])
@@ -42,14 +44,16 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
     algoArray.current = [...baseArray]
     setDone(false)
     sortIterator.current = algorithm(algoArray.current, compare, swap, markSort)
+    pivotIndex.current = -1
     setHighlightIndices([])
     setSwapIndices([])
     setSortedIndices([])
   }
 
-  function compare(i, j) {
+  function compare(indices, pivot) {
+    pivotIndex.current = pivot
     setSwapIndices([])
-    setHighlightIndices([i, j])
+    setHighlightIndices([...indices])
   }
 
   function swap(i, j) {
@@ -62,6 +66,7 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
   }
 
   function markSort(index) {
+    pivotIndex.current = -1
     setHighlightIndices([])
     setSwapIndices([])
     setSortedIndices((prev) => [...prev, index])
@@ -74,6 +79,10 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
 
     if (highlightIndices.includes(index)) {
       return comparisonColor
+    }
+
+    if (pivotIndex.current === index) {
+      return pivotColor
     }
 
     if (sortedIndices.includes(index)) {
