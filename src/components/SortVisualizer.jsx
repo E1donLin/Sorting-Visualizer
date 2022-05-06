@@ -37,13 +37,18 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
       if (algoStatus.done) {
         setDone(true)
       }
-    }, 100)
+    }, 300)
   }
 
   function reset() {
     algoArray.current = [...baseArray]
     setDone(false)
-    sortIterator.current = algorithm(algoArray.current, compare, swap, markSort)
+    sortIterator.current = algorithm(
+      algoArray.current,
+      compare,
+      combine,
+      markSort
+    )
     pivotIndex.current = -1
     setHighlightIndices([])
     setSwapIndices([])
@@ -57,12 +62,21 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
   }
 
   function swap(i, j) {
-    setHighlightIndices([])
-    setSwapIndices([i, j])
-
     const temp = algoArray.current[i]
     algoArray.current[i] = algoArray.current[j]
     algoArray.current[j] = temp
+    setHighlightIndices([])
+    setSwapIndices([i, j])
+  }
+
+  function combine(i, j) {
+    if (i !== j) {
+      const temp = algoArray.current.splice(i, 1)
+      algoArray.current.splice(j, 0, temp[0])
+
+      setHighlightIndices([])
+      setSwapIndices([j, j + 1])
+    }
   }
 
   function markSort(index) {
@@ -76,19 +90,15 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
     if (swapIndices.includes(index)) {
       return swapColor
     }
-
     if (highlightIndices.includes(index)) {
       return comparisonColor
     }
-
     if (pivotIndex.current === index) {
       return pivotColor
     }
-
     if (sortedIndices.includes(index)) {
       return sortedColor
     }
-
     return ''
   }
 

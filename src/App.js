@@ -4,6 +4,7 @@ import { bubbleSort } from './algorithms/bubbleSort'
 import { selectionSort } from './algorithms/selectionSort'
 import { insertionSort } from './algorithms/insertionSort'
 import { quickSort } from './algorithms/quickSort'
+import { mergeSort } from './algorithms/mergeSort'
 import './App.css'
 
 function makeArray(length) {
@@ -17,8 +18,8 @@ function makeArray(length) {
 }
 
 function App() {
-  const [baseArray, setArray] = useState([4, 5, 2, 1, 3])
-  const [algorithm, setAlgorithm] = useState(() => quickSort)
+  const [baseArray, setArray] = useState(makeArray(20))
+  const [algorithm, setAlgorithm] = useState(() => mergeSort)
   const [sortStatus, setSortStatus] = useState('pause')
 
   function newArray() {
