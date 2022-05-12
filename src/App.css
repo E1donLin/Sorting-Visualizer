@@ -1,17 +1,3 @@
 .container {
-  margin: 5rem 0 0 900px;
-}
-
-.array {
-  height: 100px;
-  position: relative;
-  display: flex;
-  flex-direction: column-reverse;
-}
-.bar {
-  position: absolute;
-  box-sizing: border-box;
-  background: grey;
-  border: 1px solid white;
-  transition: left 0.2s;
+  text-align: center;
 }

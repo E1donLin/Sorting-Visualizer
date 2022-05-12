@@ -1,15 +1,12 @@
 import { useState } from 'react'
-import SortVisualizer from './components/SortVisualizer'
-import { bubbleSort } from './algorithms/bubbleSort'
-import { selectionSort } from './algorithms/selectionSort'
-import { insertionSort } from './algorithms/insertionSort'
-import { quickSort } from './algorithms/quickSort'
-import { mergeSort } from './algorithms/mergeSort'
+import SortVisualizer from './components/SortVisualizer/SortVisualizer'
+import NavBar from './components/NavBar/NavBar'
+import algorithms from './algorithms'
 import './App.css'
 
 function makeArray(length) {
   const array = []
-  for (let i = 0; i < length; i++) {
+  for (let i = 1; i <= length; i++) {
     array.push(i)
   }
   array.sort(() => (Math.random() < 0.5 ? 1 : -1))
@@ -18,31 +15,29 @@ function makeArray(length) {
 }
 
 function App() {
-  const [baseArray, setArray] = useState(makeArray(20))
-  const [algorithm, setAlgorithm] = useState(() => mergeSort)
+  const [baseArray, setArray] = useState(makeArray(100))
+  const [algorithm, setAlgorithm] = useState(() => algorithms[0])
   const [sortStatus, setSortStatus] = useState('pause')
 
   function newArray() {
     setSortStatus('reset')
-    setArray(makeArray(20))
+    setArray(makeArray(100))
   }
 
   return (
     <div className='container'>
-      <h1>Sorting example</h1>
+      <NavBar
+        newArray={newArray}
+        setSortStatus={setSortStatus}
+        algorithms={algorithms}
+        algorithm={algorithm}
+        setAlgorithm={setAlgorithm}
+      />
       <SortVisualizer
         algorithm={algorithm}
         baseArray={baseArray}
         sortStatus={sortStatus}
       />
-
-      <div>
-        <h2> Controls: </h2>
-        <button onClick={newArray}>New Array</button>
-        <button onClick={() => setSortStatus('reset')}>Reset</button>
-        <button onClick={() => setSortStatus('start')}>start sorting</button>
-        <button onClick={() => setSortStatus('pause')}>pause</button>
-      </div>
     </div>
   )
 }

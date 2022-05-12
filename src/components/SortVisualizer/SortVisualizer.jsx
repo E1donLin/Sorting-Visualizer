@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import './SortVisualizer.css'
 
 const comparisonColor = 'pink'
 const swapColor = 'cyan'
@@ -37,18 +38,16 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
       if (algoStatus.done) {
         setDone(true)
       }
-    }, 300)
+    }, 10)
   }
 
   function reset() {
     algoArray.current = [...baseArray]
     setDone(false)
-    sortIterator.current = algorithm(
-      algoArray.current,
-      compare,
-      combine,
-      markSort
-    )
+    sortIterator.current =
+      algorithm.name === 'mergeSort'
+        ? algorithm.function(algoArray.current, compare, combine, markSort)
+        : algorithm.function(algoArray.current, compare, swap, markSort)
     pivotIndex.current = -1
     setHighlightIndices([])
     setSwapIndices([])

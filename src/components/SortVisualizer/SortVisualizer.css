@@ -1,0 +1,12 @@
+.array {
+  height: 500px;
+  margin-top: 13rem;
+  user-select: none;
+}
+
+.bar {
+  box-sizing: border-box;
+  background: grey;
+  border: 1px solid white;
+  display: inline-block;
+}
