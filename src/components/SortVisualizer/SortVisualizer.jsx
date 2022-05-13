@@ -1,13 +1,19 @@
 import { useState, useEffect, useRef } from 'react'
+import {
+  BAR_WIDTH,
+  COMPARISON_COLOR,
+  SWAP_COLOR,
+  PIVOT_COLOR,
+  SORTED_COLOR,
+  MERGE_SORT,
+  START,
+  RESET,
+} from '../../constants'
+
 import './SortVisualizer.css'
 
-const comparisonColor = 'pink'
-const swapColor = 'cyan'
-const sortedColor = 'springgreen'
-const pivotColor = 'sandybrown'
-
-function SortVisualizer({ baseArray, algorithm, sortStatus }) {
-  const [done, setDone] = useState(true)
+function SortVisualizer({ array, algorithm, sortStatus, speed }) {
+  const [done, setDone] = useState(false)
   const [highlightIndices, setHighlightIndices] = useState([])
   const [swapIndices, setSwapIndices] = useState([])
   const [sortedIndices, setSortedIndices] = useState([])
@@ -16,36 +22,35 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
   const intervalId = useRef(null)
   const algoArray = useRef([])
 
-  const BAR_WIDTH = 12
-
   useEffect(() => {
     reset()
-  }, [baseArray, algorithm])
+  }, [array, algorithm])
 
   useEffect(() => {
-    if (sortStatus === 'start' && !done) {
+    if (sortStatus === START && !done) {
       runAlgo()
     }
-    if (sortStatus === 'reset') {
+    if (sortStatus === RESET) {
       reset()
     }
     return () => window.clearInterval(intervalId.current)
-  }, [done, sortStatus])
+  }, [done, sortStatus, speed])
 
   function runAlgo() {
     intervalId.current = window.setInterval(() => {
+      console.log('s: ', speed)
       const algoStatus = sortIterator.current.next()
       if (algoStatus.done) {
         setDone(true)
       }
-    }, 10)
+    }, 1000 / (speed * 10))
   }
 
   function reset() {
-    algoArray.current = [...baseArray]
+    algoArray.current = [...array]
     setDone(false)
     sortIterator.current =
-      algorithm.name === 'mergeSort'
+      algorithm.name === MERGE_SORT
         ? algorithm.function(algoArray.current, compare, combine, markSort)
         : algorithm.function(algoArray.current, compare, swap, markSort)
     pivotIndex.current = -1
@@ -87,16 +92,16 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
 
   function getBackgroundColor(index) {
     if (swapIndices.includes(index)) {
-      return swapColor
+      return SWAP_COLOR
     }
     if (highlightIndices.includes(index)) {
-      return comparisonColor
+      return COMPARISON_COLOR
     }
     if (pivotIndex.current === index) {
-      return pivotColor
+      return PIVOT_COLOR
     }
     if (sortedIndices.includes(index)) {
-      return sortedColor
+      return SORTED_COLOR
     }
     return ''
   }
@@ -108,9 +113,8 @@ function SortVisualizer({ baseArray, algorithm, sortStatus }) {
           key={index}
           className='bar'
           style={{
-            left: index * BAR_WIDTH,
             width: BAR_WIDTH,
-            height: `${((value + 1) / algoArray.current.length) * 100}%`,
+            height: `${(value / algoArray.current.length) * 100}%`,
             backgroundColor: getBackgroundColor(index),
           }}
           title={`Value: ${value}`}

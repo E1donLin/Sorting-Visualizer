@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SortVisualizer from './components/SortVisualizer/SortVisualizer'
 import NavBar from './components/NavBar/NavBar'
 import algorithms from './algorithms'
+import { DEFAULT_ARRAY_SIZE, DEFAULT_SPEED, PAUSE, RESET } from './constants'
 import './App.css'
 
-function makeArray(length) {
+function makeArray(length = DEFAULT_ARRAY_SIZE) {
   const array = []
   for (let i = 1; i <= length; i++) {
     array.push(i)
@@ -15,13 +16,18 @@ function makeArray(length) {
 }
 
 function App() {
-  const [baseArray, setArray] = useState(makeArray(100))
+  const [array, setArray] = useState(makeArray())
+  const [speed, setSpeed] = useState(DEFAULT_SPEED)
   const [algorithm, setAlgorithm] = useState(() => algorithms[0])
-  const [sortStatus, setSortStatus] = useState('pause')
+  const [sortStatus, setSortStatus] = useState(PAUSE)
 
-  function newArray() {
-    setSortStatus('reset')
-    setArray(makeArray(100))
+  useEffect(() => {
+    console.log('speed: ', speed)
+  }, [speed])
+
+  function newArray(length) {
+    setSortStatus(RESET)
+    setArray(makeArray(length))
   }
 
   return (
@@ -32,11 +38,13 @@ function App() {
         algorithms={algorithms}
         algorithm={algorithm}
         setAlgorithm={setAlgorithm}
+        setSpeed={setSpeed}
       />
       <SortVisualizer
         algorithm={algorithm}
-        baseArray={baseArray}
+        array={array}
         sortStatus={sortStatus}
+        speed={speed}
       />
     </div>
   )
