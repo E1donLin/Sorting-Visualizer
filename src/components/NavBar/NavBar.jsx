@@ -8,7 +8,7 @@ import {
   Box,
   Typography,
 } from '@mui/material'
-import React from 'react'
+import React, { useState } from 'react'
 import {
   DEFAULT_ARRAY_SIZE,
   DEFAULT_SPEED,
@@ -26,10 +26,17 @@ function NavBar({
   setAlgorithm,
   setSpeed,
 }) {
+  const [arraySize, setArraySize] = useState(DEFAULT_ARRAY_SIZE)
+
   const handleALgoChange = (event) => {
     const newAlgo = algorithms.find((algo) => algo.name === event.target.value)
     setAlgorithm(newAlgo)
-    setSortStatus('reset')
+    setSortStatus(RESET)
+  }
+
+  const handleSizeChange = (event, value) => {
+    setArraySize(value)
+    newArray(value)
   }
 
   return (
@@ -57,7 +64,7 @@ function NavBar({
             defaultValue={DEFAULT_ARRAY_SIZE}
             min={10}
             max={150}
-            onChangeCommitted={(_, value) => newArray(value)}
+            onChangeCommitted={handleSizeChange}
             valueLabelDisplay='auto'
           />
         </Box>
@@ -76,7 +83,11 @@ function NavBar({
       </Box>
 
       <Box>
-        <Button sx={{ mr: 1 }} variant='outlined' onClick={() => newArray()}>
+        <Button
+          sx={{ mr: 1 }}
+          variant='outlined'
+          onClick={() => newArray(arraySize)}
+        >
           New Array
         </Button>
 

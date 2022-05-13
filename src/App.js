@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import SortVisualizer from './components/SortVisualizer/SortVisualizer'
 import NavBar from './components/NavBar/NavBar'
 import algorithms from './algorithms'
@@ -20,10 +20,6 @@ function App() {
   const [speed, setSpeed] = useState(DEFAULT_SPEED)
   const [algorithm, setAlgorithm] = useState(() => algorithms[0])
   const [sortStatus, setSortStatus] = useState(PAUSE)
-
-  useEffect(() => {
-    console.log('speed: ', speed)
-  }, [speed])
 
   function newArray(length) {
     setSortStatus(RESET)

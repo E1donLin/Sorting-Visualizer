@@ -24,7 +24,7 @@ function SortVisualizer({ array, algorithm, sortStatus, speed }) {
 
   useEffect(() => {
     reset()
-  }, [array, algorithm])
+  }, [array, algorithm]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (sortStatus === START && !done) {
@@ -34,11 +34,10 @@ function SortVisualizer({ array, algorithm, sortStatus, speed }) {
       reset()
     }
     return () => window.clearInterval(intervalId.current)
-  }, [done, sortStatus, speed])
+  }, [done, sortStatus, speed]) // eslint-disable-line react-hooks/exhaustive-deps
 
   function runAlgo() {
     intervalId.current = window.setInterval(() => {
-      console.log('s: ', speed)
       const algoStatus = sortIterator.current.next()
       if (algoStatus.done) {
         setDone(true)
